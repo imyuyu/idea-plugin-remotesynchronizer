@@ -15,7 +15,9 @@ import org.sylfra.idea.plugins.remotesynchronizer.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -48,6 +50,8 @@ public class SynchronizerThread
   private ThreadConsole console;
   private VirtualFile[] selectedFiles;
   private Stack<String> filesToCopy;
+  //used to store the source package file to compile path
+  private Map<String,String> filesToCopyMap;
   private Stack<File> filesToDelete;
   private int state;
   private SyncronizingStatsInfo statsInfo;
@@ -60,6 +64,7 @@ public class SynchronizerThread
     this.targetMappings = targetMappings;
     filesToCopy = new Stack<String>();
     filesToDelete = new Stack<File>();
+    filesToCopyMap = new HashMap<String, String>();
     state = STATE_STOPPED;
   }
 
@@ -111,6 +116,7 @@ public class SynchronizerThread
   {
     state = STATE_STOPPED;
     filesToCopy.clear();
+    filesToCopyMap.clear();
     listener.threadStopped(this, statsInfo);
   }
 
@@ -213,6 +219,7 @@ public class SynchronizerThread
   private void filterFilesToCopy()
   {
     filesToCopy.clear();
+    filesToCopyMap.clear();
     addPathsToCopy(selectedFiles);
   }
 
@@ -251,6 +258,16 @@ public class SynchronizerThread
                 filesToCopy.push(path);
               }
             }
+          }
+        }
+        else if (pathManager.isSourceFile(f)) //use isSourceFile(xx) check file
+        {
+          //
+          String outputPath = plugin.getFileSupport().getFileCompilerPaths(f);
+          filesToCopyMap.put(f.getCanonicalPath(),outputPath);
+          if (!filesToCopy.contains(f.getCanonicalPath()))
+          {
+            filesToCopy.push(f.getCanonicalPath());
           }
         }
       }
@@ -380,7 +397,13 @@ public class SynchronizerThread
   private void copyFile(String srcPath, SyncronizingStatsInfo statsInfo)
   {
     ConfigPathsManager pathsManager = plugin.getPathManager();
-    String destPath = pathsManager.getRemotePath(targetMappings, srcPath);
+    String destPath,_srcPath = filesToCopyMap.get(srcPath);
+    if(_srcPath==null){
+      destPath = pathsManager.getRemotePath(targetMappings, srcPath);
+    }else{
+      //compatible with without having to compile files
+      destPath = pathsManager.getRemotePath(targetMappings, _srcPath);
+    }
 
     // Destination path not found
     if (destPath == null)

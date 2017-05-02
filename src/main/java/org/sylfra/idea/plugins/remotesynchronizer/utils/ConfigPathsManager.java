@@ -110,6 +110,26 @@ public class ConfigPathsManager
     return false;
   }
 
+  /**
+   * to determine whether a file exists in the source package
+   * @param f file
+   * @return
+   * @author martin
+   */
+  public boolean isSourceFile(VirtualFile f){
+    VirtualFile[] vf = ProjectRootManager.getInstance(plugin.getProject()).getContentSourceRoots();
+
+    for (VirtualFile aVf : vf)
+    {
+      if (PathsUtils.isAncestor(aVf, f))
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public VirtualFile getProjectDefaultRoot()
   {
     VirtualFile[] vf = ProjectRootManager.getInstance(plugin.getProject())
