@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileDocumentManagerAdapter;
@@ -22,10 +23,7 @@ import org.sylfra.idea.plugins.remotesynchronizer.model.Config;
 @State(
   name = "RemoteSynchronizer",
   storages = {
-  @Storage(
-    id = "RemoteSynchronizer",
-    file = "$WORKSPACE_FILE$"
-  )}
+  @Storage(StoragePathMacros.WORKSPACE_FILE)}
 )
 public class ConfigStateComponent implements PersistentStateComponent<Config>
 {
