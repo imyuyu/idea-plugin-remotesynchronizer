@@ -19,13 +19,12 @@ import java.io.OutputStreamWriter;
 /**
  *
  */
-public class ConfigExternalizer extends AbstractProjectComponent
+public class ConfigExternalizer
 {
   private final Project project;
 
   protected ConfigExternalizer(Project project)
   {
-    super(project);
     this.project = project;
   }
 

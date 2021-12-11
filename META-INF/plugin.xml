@@ -6,11 +6,11 @@
     on mappings defined for your project. It can also delete obsolete files on remote locations.</description>
   <version>1.12</version>
   <vendor email="syllant@gmail.com" url="https://github.com/syllant">Sylvain Francois</vendor>
-  <idea-version since-build="133.193"/>
+  <idea-version since-build="193.5233.102"/>
   <depends>com.intellij.modules.lang</depends>
-  <depends optional="true" config-file="plugin-java.xml">com.intellij.modules.java</depends>
+  <depends optional="true" config-file="remote-synchronizer-java.xml">com.intellij.modules.java</depends>
 
-  <change-notes><![CDATA[<html>
+<change-notes><![CDATA[<html>·  ~
 <html>
   <b>1.12</b> (01/31/2017)
   <ul>
@@ -46,20 +46,25 @@
   </ul>
 </html>]]></change-notes>
 
-  <project-components>
-    <component>
-      <implementation-class>org.sylfra.idea.plugins.remotesynchronizer.RemoteSynchronizerPlugin</implementation-class>
-      <option name="workspace" value="true"/>
-    </component>
-    <component>
-      <implementation-class>org.sylfra.idea.plugins.remotesynchronizer.utils.ConfigExternalizer</implementation-class>
-    </component>
-  </project-components>
+  <applicationListeners>
+    <listener class="org.sylfra.idea.plugins.remotesynchronizer.ProjectOpenCloseListener"
+              topic="com.intellij.openapi.project.ProjectManagerListener"/>
+  </applicationListeners>
 
   <extensions defaultExtensionNs="com.intellij">
     <projectService
-      serviceInterface="org.sylfra.idea.plugins.remotesynchronizer.utils.ConfigStateComponent"
-      serviceImplementation="org.sylfra.idea.plugins.remotesynchronizer.utils.ConfigStateComponent"/>
+            serviceImplementation="org.sylfra.idea.plugins.remotesynchronizer.utils.ConfigStateComponent"/>
+
+    <projectService
+            serviceInterface="org.sylfra.idea.plugins.remotesynchronizer.javasupport.IJavaSupport"
+            serviceImplementation="org.sylfra.idea.plugins.remotesynchronizer.javasupport.NoJavaSupport" />
+
+    <projectService
+            serviceImplementation="org.sylfra.idea.plugins.remotesynchronizer.utils.ConfigExternalizer" />
+
+    <projectService
+            serviceImplementation="org.sylfra.idea.plugins.remotesynchronizer.RemoteSynchronizerPlugin" />
+    
     <projectConfigurable id="RemoteSynchronizer"
                          displayName="RemoteSynchronizer"
                          groupId="tools"

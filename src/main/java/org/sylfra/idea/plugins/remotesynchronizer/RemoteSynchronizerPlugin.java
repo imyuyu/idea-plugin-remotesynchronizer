@@ -33,8 +33,7 @@ import java.net.URL;
 /**
  * Plugin main class
  */
-public class RemoteSynchronizerPlugin
-  implements ProjectComponent, Configurable, JDOMExternalizable
+public class RemoteSynchronizerPlugin implements Configurable
 {
   public static final String PLUGIN_NAME = "RemoteSynchronizer";
 
@@ -62,7 +61,7 @@ public class RemoteSynchronizerPlugin
     this.project = project;
 
     pathManager = new ConfigPathsManager(this);
-    javaSupport = project.getComponent(IJavaSupport.class);
+    javaSupport = project.getService(IJavaSupport.class);
     if (javaSupport == null)
     {
       javaSupport = new NoJavaSupport();
@@ -143,40 +142,12 @@ public class RemoteSynchronizerPlugin
     panel = null;
   }
 
-  public void initComponent()
-  {
-  }
-
-  public void disposeComponent()
-  {
-  }
-
   public void projectOpened()
   {
     initToolWindow();
   }
 
   public void projectClosed()
-  {
-  }
-
-  public String getComponentName()
-  {
-    return PLUGIN_NAME + "Component";
-  }
-
-  public void readExternal(Element element)
-    throws InvalidDataException
-  {
-    // For 1.5 compatibility
-    Config config = getConfig();
-
-    _OldConfigExternalizer.readExternal(config, element);
-    config.fireConfigChanged();
-  }
-
-  public void writeExternal(Element element)
-    throws WriteExternalException
   {
   }
 
@@ -194,12 +165,12 @@ public class RemoteSynchronizerPlugin
 
   public static RemoteSynchronizerPlugin getInstance(Project project)
   {
-    return project.getComponent(RemoteSynchronizerPlugin.class);
+    return project.getService(RemoteSynchronizerPlugin.class);
   }
 
   public ConfigExternalizer getConfigExternalizer()
   {
-    return project.getComponent(ConfigExternalizer.class);
+    return project.getService(ConfigExternalizer.class);
   }
 
   public IJavaSupport getJavaSupport()
@@ -219,7 +190,7 @@ public class RemoteSynchronizerPlugin
    */
   public ConfigStateComponent getStateComponent()
   {
-    return ServiceManager.getService(project, ConfigStateComponent.class);
+    return project.getService(ConfigStateComponent.class);
   }
 
   public void launchSyncIfAllowed(VirtualFile[] files)

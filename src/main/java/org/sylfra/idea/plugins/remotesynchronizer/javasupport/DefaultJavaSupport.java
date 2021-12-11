@@ -2,6 +2,7 @@ package org.sylfra.idea.plugins.remotesynchronizer.javasupport;
 
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -21,22 +22,21 @@ import java.util.List;
 
 /**
  */
-public class DefaultJavaSupport extends AbstractProjectComponent implements IJavaSupport
+public class DefaultJavaSupport implements IJavaSupport
 {
   private final Project project;
 
   protected DefaultJavaSupport(Project project)
   {
-    super(project);
     this.project = project;
   }
 
   public VirtualFile[] getSelectedFiles(DataContext dataContext)
   {
-    VirtualFile[] selectedFiles = DataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext);
+    VirtualFile[] selectedFiles = LangDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext);
     if (selectedFiles == null)
     {
-      Module module = DataKeys.MODULE.getData(dataContext);
+      Module module = LangDataKeys.MODULE.getData(dataContext);
       return (module == null) ? null : ModuleRootManager.getInstance(module).getContentRoots();
     }
     return selectedFiles;
@@ -44,7 +44,7 @@ public class DefaultJavaSupport extends AbstractProjectComponent implements IJav
 
   public boolean insideModule(DataContext dataContext)
   {
-    return (DataKeys.MODULE.getData(dataContext) != null);
+    return (LangDataKeys.MODULE.getData(dataContext) != null);
   }
 
   /**
