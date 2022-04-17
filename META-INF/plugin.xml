@@ -4,7 +4,7 @@
     Instead of manually copying files from your project to other locations using external
     tools (command line, file explorer, etc.), RemoteSynchronizer launches copies from your IDE, relying
     on mappings defined for your project. It can also delete obsolete files on remote locations.</description>
-  <version>1.13</version>
+  <version>1.14</version>
   <vendor email="2075904@gmail.com" url="https://github.com/imyuyu">imyuyu</vendor>
   <idea-version since-build="193.5233.102"/>
   <depends>com.intellij.modules.lang</depends>
@@ -12,6 +12,10 @@
 
 <change-notes><![CDATA[<html>·  ~
 <html>
+<b>1.14</b> (04/17/2022)
+  <ul>
+    <li>Feature: added support for IntelliJ IDEA 2022.1.</a>
+  </ul>
  <b>1.13</b> (12/11/2021)
   <ul>
     <li>Feature: added support for IntelliJ IDEA 2021.2.</a>
