@@ -153,14 +153,16 @@ public class RemoteSynchronizerPlugin implements Configurable
 
   private void initToolWindow()
   {
-    ToolWindow toolwindow = ToolWindowManager.getInstance(project)
-      .registerToolWindow(PLUGIN_NAME, true, ToolWindowAnchor.BOTTOM);
-    ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-    Content content = contentFactory.createContent(new ToolPanel(consolePane, getConfig()),
-      PLUGIN_NAME, true);
-    toolwindow.getContentManager().addContent(content);
+    ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+    toolWindowManager.invokeLater(() -> {
+      ToolWindow toolwindow = toolWindowManager.registerToolWindow(PLUGIN_NAME, true, ToolWindowAnchor.BOTTOM);
+      ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+      Content content = contentFactory.createContent(new ToolPanel(consolePane, getConfig()),
+              PLUGIN_NAME, true);
+      toolwindow.getContentManager().addContent(content);
 
-    toolwindow.setIcon(new ImageIcon(getResource("logo-small.png")));
+      toolwindow.setIcon(new ImageIcon(getResource("logo-small.png")));
+    });
   }
 
   public static RemoteSynchronizerPlugin getInstance(Project project)
